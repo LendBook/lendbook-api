@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "main": "index.mjs",
   "engines": {
-    "node": "20.x"
+    "node": "16.x"
   },
   "scripts": {
     "start": "node index.mjs"
   },
   "license": "MIT",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "ethers": "^6.11.1",
     "express": "^4.19.2",

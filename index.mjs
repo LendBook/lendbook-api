@@ -1,5 +1,6 @@
 import express from 'express';
 import { ethers } from 'ethers';
+import cors from 'cors';
 import contractABI from './abi/Book.json' assert { type: 'json' };
 import dotenv from 'dotenv';
 import swaggerJsdoc from 'swagger-jsdoc';
@@ -29,13 +30,10 @@ const options = {
   apis: ['./routes/*.js', './models/*.js'],
 };
 
-// Initialize swagger-jsdoc
 const swaggerSpec = swaggerJsdoc(options);
 
-// Middleware to expose Swagger documentation
+app.use(cors());
 app.use('/api-docs', serve, setup(swaggerDocument));
-
-
 
 /**
  * @swagger
