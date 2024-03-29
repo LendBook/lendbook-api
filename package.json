@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "build": "node api/index.mjs",
+    "start": "node api/index.mjs",
     "serve": "node api/index.mjs"
   },
   "license": "MIT",
