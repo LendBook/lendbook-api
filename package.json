@@ -6,7 +6,7 @@
     "node": "16.x"
   },
   "scripts": {
-    "start": "node api/index.mjs"
+    "start": "node index.mjs"
   },
   "license": "MIT",
   "dependencies": {

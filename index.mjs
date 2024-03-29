@@ -1,10 +1,10 @@
 import express from 'express';
 import { ethers } from 'ethers';
-import contractABI from '../abi/Book.json' assert { type: 'json' };
+import contractABI from './abi/Book.json' assert { type: 'json' };
 import dotenv from 'dotenv';
 import swaggerJsdoc from 'swagger-jsdoc';
 import { serve, setup } from 'swagger-ui-express';
-import swaggerDocument from '../swagger.json' assert { type: 'json' };
+import swaggerDocument from './swagger.json' assert { type: 'json' };
 
 dotenv.config();
 
