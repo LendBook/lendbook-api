@@ -10,7 +10,8 @@ The LendBook API provides endpoints to interact with a smart contract. It allows
 
 1. Node.js and npm installed on your machine.
 2. An Ethereum node URL (e.g., Infura) for provider communication.
-3. Set up a `.env` file with the following environment variables:
+3. A contract ABI JSON file.
+4. Set up a `.env` file with the following environment variables:
 
 ```
 URL_PROVIDER=<Your Ethereum node URL>
