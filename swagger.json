@@ -1,0 +1,79 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Lendbook API",
+      "version": "1.0.0",
+      "description": "Get data from the Book.sol contract"
+    },
+    "servers": [
+      {
+        "url": "http://localhost:3000",
+        "description": "Local server"
+      }
+    ],
+    "paths": {
+      "/api/v1/blockNumber": {
+        "get": {
+          "summary": "Get the current block number",
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          }
+        }
+      },
+      "/api/v1/contractAddress": {
+        "get": {
+          "summary": "Get the address of the smart contract",
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          }
+        }
+      },
+      "/api/v1/request/{functionName}": {
+        "get": {
+          "summary": "Call a function of the smart contract",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "functionName",
+              "required": true,
+              "description": "Name of the function to call",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          }
+        }
+      },
+      "/api/v1/constant/{constantName}": {
+        "get": {
+          "summary": "Get the value of a constant from the smart contract",
+          "parameters": [
+            {
+              "in": "path",
+              "name": "constantName",
+              "required": true,
+              "description": "Name of the constant to retrieve",
+              "schema": {
+                "type": "string"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Success"
+            }
+          }
+        }
+      }
+    }
+  }
+  

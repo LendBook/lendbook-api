@@ -1,0 +1,23 @@
+{
+  "name": "lendbook-api",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "serve": "node index.mjs"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ethers": "^6.11.1",
+    "express": "^4.19.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.0",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "esm": "^3.2.25",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.3"
+  }
+}
