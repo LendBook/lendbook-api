@@ -33,6 +33,10 @@ const options = {
 const swaggerSpec = swaggerJsdoc(options);
 
 app.use(cors());
+app.use(cors({
+  origin: ['https://api.lendbook.org']
+}));
+
 app.use('/api-docs', serve, setup(swaggerDocument));
 
 /**
