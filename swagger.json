@@ -12,7 +12,7 @@
       }
     ],
     "paths": {
-      "/api/v1/blockNumber": {
+      "/v1/blockNumber": {
         "get": {
           "summary": "Get the current block number",
           "responses": {
@@ -22,7 +22,7 @@
           }
         }
       },
-      "/api/v1/contractAddress": {
+      "/v1/contractAddress": {
         "get": {
           "summary": "Get the address of the smart contract",
           "responses": {
@@ -32,7 +32,7 @@
           }
         }
       },
-      "/api/v1/request/{functionName}": {
+      "/v1/request/{functionName}": {
         "get": {
           "summary": "Call a function of the smart contract",
           "parameters": [
@@ -53,7 +53,7 @@
           }
         }
       },
-      "/api/v1/constant/{constantName}": {
+      "/v1/constant/{constantName}": {
         "get": {
           "summary": "Get the value of a constant from the smart contract",
           "parameters": [

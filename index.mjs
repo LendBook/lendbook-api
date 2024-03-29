@@ -39,14 +39,14 @@ app.use('/api-docs', serve, setup(swaggerDocument));
 
 /**
  * @swagger
- * /api/v1/blockNumber:
+ * /v1/blockNumber:
  *   get:
  *     summary: Get the current block number
  *     responses:
  *       200:
  *         description: Success
  */
-app.get('/api/v1/blockNumber', async (req, res) => {
+app.get('/v1/blockNumber', async (req, res) => {
   try {
     const blockNumber = await provider.getBlockNumber();
     res.json({ blockNumber });
@@ -58,20 +58,20 @@ app.get('/api/v1/blockNumber', async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/contractAddress:
+ * /v1/contractAddress:
  *   get:
  *     summary: Get the address of the smart contract
  *     responses:
  *       200:
  *         description: Success
  */
-app.get('/api/v1/contractAddress', (req, res) => {
+app.get('/v1/contractAddress', (req, res) => {
   res.json({ contractAddress });
 });
 
 /**
  * @swagger
- * /api/v1/request/{functionName}:
+ * /v1/request/{functionName}:
  *   get:
  *     summary: Call a function of the smart contract
  *     parameters:
@@ -85,7 +85,7 @@ app.get('/api/v1/contractAddress', (req, res) => {
  *       200:
  *         description: Success
  */
-app.get('/api/v1/request/:functionName/*', async (req, res) => {
+app.get('/v1/request/:functionName/*', async (req, res) => {
   try {
     const functionName = req.params.functionName;
     const args = req.params[0].split('/');
@@ -107,7 +107,7 @@ app.get('/api/v1/request/:functionName/*', async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/constant/{constantName}:
+ * /v1/constant/{constantName}:
  *   get:
  *     summary: Get the value of a constant from the smart contract
  *     parameters:
@@ -121,7 +121,7 @@ app.get('/api/v1/request/:functionName/*', async (req, res) => {
  *       200:
  *         description: Success
  */
-app.get('/api/v1/constant/:constantName', async (req, res) => {
+app.get('/v1/constant/:constantName', async (req, res) => {
   try {
     const constantName = req.params.constantName;
     
