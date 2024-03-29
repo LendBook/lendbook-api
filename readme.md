@@ -27,7 +27,7 @@ CHAIN_ID=<Your chain ID>
 
 ### Usage
 
-1. Start the API server by running `yarn serve`.
+1. Start the API server by running `yarn start`.
 2. Access the API endpoints using your preferred HTTP client (e.g., Postman).
 
 ### Swagger Documentation
