@@ -9,6 +9,7 @@ import swaggerDocument from '../swagger.json' assert { type: 'json' };
 dotenv.config();
 
 const app = express();
+
 const urlProvider = process.env.URL_PROVIDER || '';
 const contractAddress = process.env.CONTRACT_ADDRESS || '';
 const chainId = process.env.CHAIN_ID || '';
@@ -33,6 +34,8 @@ const swaggerSpec = swaggerJsdoc(options);
 
 // Middleware to expose Swagger documentation
 app.use('/api-docs', serve, setup(swaggerDocument));
+
+
 
 /**
  * @swagger
