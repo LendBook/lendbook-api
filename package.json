@@ -1,7 +1,7 @@
 {
   "name": "lendbook-api",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "index.mjs",
   "engines": {
     "node": "20.x"
   },
