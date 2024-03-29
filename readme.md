@@ -37,19 +37,19 @@ CHAIN_ID=<Your chain ID>
 
 ## Endpoints
 
-### GET /api/v1/blockNumber
+### GET /v1/blockNumber
 
 Returns the current block number on the Ethereum blockchain.
 
-### GET /api/v1/contractAddress
+### GET /v1/contractAddress
 
 Returns the address of the smart contract.
 
-### GET /api/v1/request/{functionName}
+### GET /v1/request/{functionName}
 
 Calls a function of the smart contract by providing the function name as a parameter.
 
-### GET /api/v1/constant/{constantName}
+### GET /v1/constant/{constantName}
 
 Returns the value of a constant from the smart contract by providing the constant name as a parameter.
 
