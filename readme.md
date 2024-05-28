@@ -17,6 +17,7 @@ The LendBook API provides endpoints to interact with a smart contract. It allows
 URL_PROVIDER=<Your Ethereum node URL>
 CONTRACT_ADDRESS=<Your contract address>
 CHAIN_ID=<Your chain ID>
+MONGO_URI=mongodb+srv://<user>:<pass>@cluster0.rim1pqt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 ```
 
 ### Installation
@@ -28,7 +29,6 @@ CHAIN_ID=<Your chain ID>
 ### Usage
 
 1. Start the API server by running `yarn start`.
-2. Access the API endpoints using your preferred HTTP client (e.g., Postman).
 
 ### Swagger Documentation
 
@@ -53,10 +53,3 @@ Calls a function of the smart contract by providing the function name as a param
 
 Returns the value of a constant from the smart contract by providing the constant name as a parameter.
 
-## Contributing
-
-Contributions are welcome! Please fork the repository, make your changes, and submit a pull request.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
