@@ -1,11 +1,11 @@
 import express from 'express';
 import { ethers } from 'ethers';
 import cors from 'cors';
-import contractABI from '../abi/Book.json' assert { type: 'json' };
+import contractABI from '../abi/Book.json';
 import dotenv from 'dotenv';
 import swaggerJsdoc from 'swagger-jsdoc';
 import { serve, setup } from 'swagger-ui-express';
-import swaggerDocument from '../swagger.json' assert { type: 'json' };
+import swaggerDocument from '../swagger.json';
 import mongoose from 'mongoose';
 import cron from 'node-cron';
 
