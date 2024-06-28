@@ -1,12 +1,12 @@
 {
   "name": "lendbook-api",
   "version": "1.0.0",
-  "main": "index.mjs",
+  "main": "api/index.js",
   "engines": {
     "node": "16.x"
   },
   "scripts": {
-    "start": "node index.mjs"
+    "start": "node api/index.js"
   },
   "license": "MIT",
   "dependencies": {

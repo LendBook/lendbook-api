@@ -1,11 +1,11 @@
 import express from 'express';
 import { ethers } from 'ethers';
 import cors from 'cors';
-import contractABI from './abi/Book.json' assert { type: 'json' };
+import contractABI from '../abi/Book.json' assert { type: 'json' };
 import dotenv from 'dotenv';
 import swaggerJsdoc from 'swagger-jsdoc';
 import { serve, setup } from 'swagger-ui-express';
-import swaggerDocument from './swagger.json' assert { type: 'json' };
+import swaggerDocument from '../swagger.json' assert { type: 'json' };
 import mongoose from 'mongoose';
 import cron from 'node-cron';
 
@@ -18,7 +18,7 @@ const contractAddress = process.env.CONTRACT_ADDRESS || '';
 const chainId = process.env.CHAIN_ID || '';
 const mongoUri = process.env.MONGO_URI || '';
 
-mongoose.connect(mongoUri);
+mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 const blockchainSchema = new mongoose.Schema({
   blockNumber: Number,
@@ -53,7 +53,7 @@ const options = {
       version: '1.0.0',
     },
   },
-  apis: ['./routes/*.js', './models/*.js'],
+  apis: ['./api/*.js'],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
@@ -269,7 +269,4 @@ app.get('/', (req, res) => {
   res.send('API Online');
 });
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`API started at http://localhost:${port}`);
-});
+export default app;
