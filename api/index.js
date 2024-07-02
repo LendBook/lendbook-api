@@ -149,6 +149,11 @@ async function updateFunctionValue(req, res, next) {
       console.log(`Function name: ${functionName}`);
       console.log(`Arguments: ${parsedArgs}`);
 
+      // Check if the function exists in the contract
+      if (!contract.functions[functionName]) {
+        throw new Error(`Function ${functionName} not found in contract`);
+      }
+
       const functionKey = `${functionName}:${parsedArgs.join(':')}`;
       let functionFromDB = await ContractFunction.findOne({ name: functionKey });
 
