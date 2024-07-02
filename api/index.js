@@ -84,6 +84,45 @@ async function fetchAndUpdateBlockchainState() {
 // Run every 10 seconds
 cron.schedule('*/10 * * * * *', fetchAndUpdateBlockchainState);
 
+// Middleware to update database (Compare between Sepolia blockchain and MONGO DB)
+async function updateConstantValue(req, res, next) {
+  if (req.params.constantName) {
+    try {
+      const constantName = req.params.constantName;
+      let constantFromDB = await Constant.findOne({ name: constantName });
+
+      if (!constantFromDB) {
+        // Fetch from blockchain if no values in MongoDB
+        const constantValue = await contract[constantName]();
+        await Constant.create({ name: constantName, value: constantValue.toString() });
+        constantFromDB = { name: constantName, value: constantValue.toString() };
+        console.log(`Constant ${constantName} fetched from blockchain and saved to DB.`);
+      }
+
+      req.constantValue = constantFromDB.value;
+      res.json({ [constantName]: constantFromDB.value });
+
+      // Update value in background
+      const constantValueFromBlockchain = await contract[constantName]();
+      if (constantFromDB.value !== constantValueFromBlockchain.toString()) {
+        await Constant.findOneAndUpdate(
+          { name: constantName },
+          { value: constantValueFromBlockchain.toString(), updatedAt: new Date() },
+          { upsert: true, new: true }
+        );
+        console.log(`Constant ${constantName} updated in the database.`);
+      }
+    } catch (error) {
+      const err = error instanceof Error ? error : new Error(String(error));
+      if (!res.headersSent) {
+        res.status(500).json({ error: err.message });
+      }
+    }
+  } else {
+    next();
+  }
+}
+
 // Middleware to update function values
 async function updateFunctionValue(req, res, next) {
   if (req.params.functionName) {
@@ -137,6 +176,7 @@ async function updateFunctionValue(req, res, next) {
     next();
   }
 }
+
 
 /**
  * @swagger
@@ -197,8 +237,8 @@ app.get('/v1/contractAddress', (req, res) => {
  *       200:
  *         description: Success
  */
-app.get('/v1/request/:functionName/*', updateFunctionValue, (req, res) => {
-});
+app.get('/v1/request/:functionName/*', updateFunctionValue, (req, res) => {});
+
 
 /**
  * @swagger
