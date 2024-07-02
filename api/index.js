@@ -84,83 +84,47 @@ async function fetchAndUpdateBlockchainState() {
 // Run every 10 seconds
 cron.schedule('*/10 * * * * *', fetchAndUpdateBlockchainState);
 
-// Middleware to update database (Compare between Sepolia blockchain and MONGO DB)
-async function updateConstantValue(req, res, next) {
-  if (req.params.constantName) {
-    try {
-      const constantName = req.params.constantName;
-      let constantFromDB = await Constant.findOne({ name: constantName });
-
-      if (!constantFromDB) {
-        // Fetch from blockchain if no values in MongoDB
-        const constantValue = await contract[constantName]();
-        await Constant.create({ name: constantName, value: constantValue.toString() });
-        constantFromDB = { name: constantName, value: constantValue.toString() };
-        console.log(`Constant ${constantName} fetched from blockchain and saved to DB.`);
-      }
-
-      req.constantValue = constantFromDB.value;
-      res.json({ [constantName]: constantFromDB.value });
-
-      // Update value in background
-      const constantValueFromBlockchain = await contract[constantName]();
-      if (constantFromDB.value !== constantValueFromBlockchain.toString()) {
-        await Constant.findOneAndUpdate(
-          { name: constantName },
-          { value: constantValueFromBlockchain.toString(), updatedAt: new Date() },
-          { upsert: true, new: true }
-        );
-        console.log(`Constant ${constantName} updated in the database.`);
-      }
-    } catch (error) {
-      const err = error instanceof Error ? error : new Error(String(error));
-      if (!res.headersSent) {
-        res.status(500).json({ error: err.message });
-      }
-    }
-  } else {
-    next();
-  }
-}
-
 // Middleware to update function values
 async function updateFunctionValue(req, res, next) {
   if (req.params.functionName) {
     try {
       const functionName = req.params.functionName;
       const args = req.params[0].split('/').filter(arg => arg);
-      
+
+      // Convert boolean arguments from string to actual boolean type
+      const parsedArgs = args.map(arg => (arg === 'true' ? true : arg === 'false' ? false : arg));
+
       // Log the arguments received
       console.log(`Function name: ${functionName}`);
-      console.log(`Arguments: ${args}`);
+      console.log(`Arguments: ${parsedArgs}`);
 
-      const functionKey = `${functionName}:${args.join(':')}`;
+      const functionKey = `${functionName}:${parsedArgs.join(':')}`;
       let functionFromDB = await ContractFunction.findOne({ name: functionKey });
 
       if (!functionFromDB) {
         // Fetch from blockchain if no values in MongoDB
-        const functionResult = await contract[functionName](...args);
-        
+        const functionResult = await contract[functionName](...parsedArgs);
+
         // Log the result from the blockchain
         console.log(`Result from blockchain: ${functionResult.toString()}`);
 
-        await ContractFunction.create({ name: functionKey, args, result: functionResult.toString() });
-        functionFromDB = { name: functionKey, args, result: functionResult.toString() };
-        console.log(`Function ${functionName} with args ${args} fetched from blockchain and saved to DB.`);
+        await ContractFunction.create({ name: functionKey, args: parsedArgs, result: functionResult.toString() });
+        functionFromDB = { name: functionKey, args: parsedArgs, result: functionResult.toString() };
+        console.log(`Function ${functionName} with args ${parsedArgs} fetched from blockchain and saved to DB.`);
       }
 
       req.functionResult = functionFromDB.result;
       res.json({ result: functionFromDB.result });
 
       // Update function result in background
-      const functionResultFromBlockchain = await contract[functionName](...args);
+      const functionResultFromBlockchain = await contract[functionName](...parsedArgs);
       if (functionFromDB.result !== functionResultFromBlockchain.toString()) {
         await ContractFunction.findOneAndUpdate(
           { name: functionKey },
           { result: functionResultFromBlockchain.toString(), updatedAt: new Date() },
           { upsert: true, new: true }
         );
-        console.log(`Function ${functionName} with args ${args} updated in the database.`);
+        console.log(`Function ${functionName} with args ${parsedArgs} updated in the database.`);
       }
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error));
@@ -173,7 +137,6 @@ async function updateFunctionValue(req, res, next) {
     next();
   }
 }
-
 
 /**
  * @swagger
@@ -234,8 +197,8 @@ app.get('/v1/contractAddress', (req, res) => {
  *       200:
  *         description: Success
  */
-app.get('/v1/request/:functionName/*', updateFunctionValue, (req, res) => {});
-
+app.get('/v1/request/:functionName/*', updateFunctionValue, (req, res) => {
+});
 
 /**
  * @swagger
