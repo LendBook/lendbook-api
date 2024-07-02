@@ -128,7 +128,7 @@ async function updateFunctionValue(req, res, next) {
   if (req.params.functionName) {
     try {
       const functionName = req.params.functionName;
-      const args = req.params[0].split('/');
+      const args = req.params[0].split('/').filter(arg => arg);
       const functionKey = `${functionName}:${args.join(':')}`;
       let functionFromDB = await ContractFunction.findOne({ name: functionKey });
 
@@ -203,7 +203,7 @@ app.get('/v1/contractAddress', (req, res) => {
 
 /**
  * @swagger
- * /v1/request/{functionName}:
+ * /v1/request/{functionName}/*:
  *   get:
  *     summary: Call a function of the smart contract
  *     parameters:
@@ -211,6 +211,12 @@ app.get('/v1/contractAddress', (req, res) => {
  *         name: functionName
  *         required: true
  *         description: Name of the function to call
+ *         schema:
+ *           type: string
+ *       - in: path
+ *         name: '*'
+ *         required: false
+ *         description: Arguments for the function
  *         schema:
  *           type: string
  *     responses:
