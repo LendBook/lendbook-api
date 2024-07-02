@@ -123,6 +123,11 @@ async function updateConstantValue(req, res, next) {
   }
 }
 
+// Fonction pour vérifier si une adresse Ethereum est valide
+function isValidEthereumAddress(address) {
+  return /^0x[a-fA-F0-9]{40}$/.test(address);
+}
+
 // Middleware to update function values
 async function updateFunctionValue(req, res, next) {
   if (req.params.functionName) {
@@ -132,6 +137,13 @@ async function updateFunctionValue(req, res, next) {
 
       // Convert boolean arguments from string to actual boolean type
       const parsedArgs = args.map(arg => (arg === 'true' ? true : arg === 'false' ? false : arg));
+
+      // Validate Ethereum addresses
+      for (const arg of parsedArgs) {
+        if (typeof arg === 'string' && arg.startsWith('0x') && !isValidEthereumAddress(arg)) {
+          throw new Error(`Invalid Ethereum address: ${arg}`);
+        }
+      }
 
       // Log the arguments received
       console.log(`Function name: ${functionName}`);
@@ -168,6 +180,12 @@ async function updateFunctionValue(req, res, next) {
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error));
       console.error('Error in updateFunctionValue:', err.message);
+
+      // Detailed logging
+      console.error(`Stack trace: ${err.stack}`);
+      console.error(`Function name: ${req.params.functionName}`);
+      console.error(`Arguments: ${req.params[0]}`);
+
       if (!res.headersSent) {
         res.status(500).json({ error: err.message });
       }
