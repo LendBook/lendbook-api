@@ -129,12 +129,21 @@ async function updateFunctionValue(req, res, next) {
     try {
       const functionName = req.params.functionName;
       const args = req.params[0].split('/').filter(arg => arg);
+      
+      // Log the arguments received
+      console.log(`Function name: ${functionName}`);
+      console.log(`Arguments: ${args}`);
+
       const functionKey = `${functionName}:${args.join(':')}`;
       let functionFromDB = await ContractFunction.findOne({ name: functionKey });
 
       if (!functionFromDB) {
         // Fetch from blockchain if no values in MongoDB
         const functionResult = await contract[functionName](...args);
+        
+        // Log the result from the blockchain
+        console.log(`Result from blockchain: ${functionResult.toString()}`);
+
         await ContractFunction.create({ name: functionKey, args, result: functionResult.toString() });
         functionFromDB = { name: functionKey, args, result: functionResult.toString() };
         console.log(`Function ${functionName} with args ${args} fetched from blockchain and saved to DB.`);
@@ -155,6 +164,7 @@ async function updateFunctionValue(req, res, next) {
       }
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error));
+      console.error('Error in updateFunctionValue:', err.message);
       if (!res.headersSent) {
         res.status(500).json({ error: err.message });
       }
@@ -163,6 +173,7 @@ async function updateFunctionValue(req, res, next) {
     next();
   }
 }
+
 
 /**
  * @swagger
@@ -223,8 +234,8 @@ app.get('/v1/contractAddress', (req, res) => {
  *       200:
  *         description: Success
  */
-app.get('/v1/request/:functionName/*', updateFunctionValue, (req, res) => {
-});
+app.get('/v1/request/:functionName/*', updateFunctionValue, (req, res) => {});
+
 
 /**
  * @swagger
