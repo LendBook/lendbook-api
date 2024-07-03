@@ -18,6 +18,8 @@ const urlProvider = process.env.URL_PROVIDER || '';
 const contractAddress = process.env.CONTRACT_ADDRESS || '';
 const chainId = process.env.CHAIN_ID || '';
 const mongoUri = process.env.MONGO_URI || '';
+const USDC_ADDRESS = process.env.USDC_ADDRESS ||'0xB1aEa92D4BF0BFBc2C5bA679A2819Efefc998CEB';
+const WETH_ADDRESS = process.env.WETH_ADDRESS ||'0x25b8e42bdFC4cf8268B56B049d5C730762035407';
 
 mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -187,13 +189,13 @@ app.get('/v1/balanceUSDC/:walletAddress', async (req, res) => {
   }
 
   try {
-    const usdcContract = new ethers.Contract(process.env.USDC_ADDRESS, erc20ABI, provider);
+    const usdcContract = new ethers.Contract(USDC_ADDRESS, erc20ABI, provider);
     const usdcBalance = await usdcContract.balanceOf(walletAddress);
 
     // Log the balance for debugging
     console.log(`USDC Balance: ${usdcBalance}`);
 
-    const formattedBalance = usdcBalance ? parseFloat(ethers.utils.formatUnits(usdcBalance, 6)) : 0; // Assuming USDC has 6 decimals
+    const formattedBalance = usdcBalance ? parseFloat(ethers.utils.formatUnits(usdcBalance, 18)) : 0;
 
     res.json({
       balance: formattedBalance
@@ -213,13 +215,13 @@ app.get('/v1/balanceWETH/:walletAddress', async (req, res) => {
   }
 
   try {
-    const wethContract = new ethers.Contract(process.env.WETH_ADDRESS, erc20ABI, provider);
+    const wethContract = new ethers.Contract(WETH_ADDRESS, erc20ABI, provider);
     const wethBalance = await wethContract.balanceOf(walletAddress);
 
     // Log the balance for debugging
     console.log(`WETH Balance: ${wethBalance}`);
 
-    const formattedBalance = wethBalance ? parseFloat(ethers.utils.formatUnits(wethBalance, 18)) : 0; // Assuming WETH has 18 decimals
+    const formattedBalance = wethBalance ? parseFloat(ethers.utils.formatUnits(wethBalance, 18)) : 0; 
 
     res.json({
       balance: formattedBalance
