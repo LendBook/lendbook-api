@@ -179,6 +179,52 @@ async function updateFunctionValue(req, res, next) {
 }
 
 
+// Endpoint for USDC balance
+app.get('/v1/balanceUSDC/:walletAddress', async (req, res) => {
+  const { walletAddress } = req.params;
+
+  if (!walletAddress) {
+    return res.status(400).json({ error: "walletAddress is required" });
+  }
+
+  try {
+    const usdcContract = new ethers.Contract(process.env.USDC_ADDRESS, erc20ABI, provider);
+    const usdcBalance = await usdcContract.balanceOf(walletAddress);
+    const formattedBalance = ethers.utils.formatUnits(usdcBalance, 18);
+    const balanceWithoutDecimals = parseInt(formattedBalance, 10); 
+
+    res.json({
+      balance: balanceWithoutDecimals
+    });
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error(String(error));
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Endpoint for WETH balance
+app.get('/v1/balanceWETH/:walletAddress', async (req, res) => {
+  const { walletAddress } = req.params;
+
+  if (!walletAddress) {
+    return res.status(400).json({ error: "walletAddress is required" });
+  }
+
+  try {
+    const wethContract = new ethers.Contract(process.env.WETH_ADDRESS, erc20ABI, provider);
+    const wethBalance = await wethContract.balanceOf(walletAddress);
+    const formattedBalance = ethers.utils.formatUnits(wethBalance, 18);
+    const balanceWithoutDecimals = parseInt(formattedBalance, 10);
+    res.json({
+      balance: balanceWithoutDecimals
+    });
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error(String(error));
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
 /**
  * @swagger
  * /v1/blockNumber:
@@ -258,48 +304,6 @@ app.get('/v1/request/:functionName/*', updateFunctionValue, (req, res) => {});
  *         description: Success
  */
 app.get('/v1/constant/:constantName', updateConstantValue, (req, res) => {
-});
-
-// Endpoint for USDC balance
-app.get('/v1/balanceUSDC/:walletAddress', async (req, res) => {
-  const { walletAddress } = req.params;
-
-  if (!walletAddress) {
-    return res.status(400).json({ error: "walletAddress is required" });
-  }
-
-  try {
-    const usdcContract = new ethers.Contract(process.env.USDC_ADDRESS, erc20ABI, provider);
-    const usdcBalance = await usdcContract.balanceOf(walletAddress);
-
-    res.json({
-      usdcBalance: ethers.utils.formatUnits(usdcBalance, 18)
-    });
-  } catch (error) {
-    const err = error instanceof Error ? error : new Error(String(error));
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Endpoint for WETH balance
-app.get('/v1/balanceWETH/:walletAddress', async (req, res) => {
-  const { walletAddress } = req.params;
-
-  if (!walletAddress) {
-    return res.status(400).json({ error: "walletAddress is required" });
-  }
-
-  try {
-    const wethContract = new ethers.Contract(process.env.WETH_ADDRESS, erc20ABI, provider);
-    const wethBalance = await wethContract.balanceOf(walletAddress);
-
-    res.json({
-      wethBalance: ethers.utils.formatUnits(wethBalance, 18)
-    });
-  } catch (error) {
-    const err = error instanceof Error ? error : new Error(String(error));
-    res.status(500).json({ error: err.message });
-  }
 });
 
 /**
