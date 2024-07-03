@@ -261,8 +261,8 @@ app.get('/v1/constant/:constantName', updateConstantValue, (req, res) => {
 });
 
 // Endpoint for USDC balance
-app.get('/v1/balanceUSDC', async (req, res) => {
-  const { walletAddress } = req.query;
+app.get('/v1/balanceUSDC/:walletAddress', async (req, res) => {
+  const { walletAddress } = req.params;
 
   if (!walletAddress) {
     return res.status(400).json({ error: "walletAddress is required" });
@@ -282,8 +282,8 @@ app.get('/v1/balanceUSDC', async (req, res) => {
 });
 
 // Endpoint for WETH balance
-app.get('/v1/balanceWETH', async (req, res) => {
-  const { walletAddress } = req.query;
+app.get('/v1/balanceWETH/:walletAddress', async (req, res) => {
+  const { walletAddress } = req.params;
 
   if (!walletAddress) {
     return res.status(400).json({ error: "walletAddress is required" });
