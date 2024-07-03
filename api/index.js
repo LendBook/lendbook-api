@@ -211,6 +211,8 @@ app.get('/v1/balanceWETH/:walletAddress', async (req, res) => {
 
   try {
     const wethContract = new ethers.Contract(process.env.WETH_ADDRESS, erc20ABI, provider);
+
+    console.log(process.env.WETH_ADDRESS);
     const wethBalance = await wethContract.balanceOf(walletAddress);
     const formattedBalance = parseFloat(ethers.utils.formatUnits(wethBalance, 18));
  
