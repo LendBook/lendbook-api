@@ -190,11 +190,10 @@ app.get('/v1/balanceUSDC/:walletAddress', async (req, res) => {
   try {
     const usdcContract = new ethers.Contract(process.env.USDC_ADDRESS, erc20ABI, provider);
     const usdcBalance = await usdcContract.balanceOf(walletAddress);
-    const formattedBalance = ethers.utils.formatUnits(usdcBalance, 18);
-    const balanceWithoutDecimals = parseInt(formattedBalance, 10); 
-
+    const formattedBalance = parseFloat(ethers.utils.formatUnits(usdcBalance, 18));
+    
     res.json({
-      balance: balanceWithoutDecimals
+      balance: formattedBalance
     });
   } catch (error) {
     const err = error instanceof Error ? error : new Error(String(error));
@@ -213,10 +212,10 @@ app.get('/v1/balanceWETH/:walletAddress', async (req, res) => {
   try {
     const wethContract = new ethers.Contract(process.env.WETH_ADDRESS, erc20ABI, provider);
     const wethBalance = await wethContract.balanceOf(walletAddress);
-    const formattedBalance = ethers.utils.formatUnits(wethBalance, 18);
-    const balanceWithoutDecimals = parseInt(formattedBalance, 10);
+    const formattedBalance = parseFloat(ethers.utils.formatUnits(wethBalance, 18));
+ 
     res.json({
-      balance: balanceWithoutDecimals
+      balance: formattedBalance
     });
   } catch (error) {
     const err = error instanceof Error ? error : new Error(String(error));
