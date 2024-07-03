@@ -15,9 +15,12 @@ The LendBook API provides endpoints to interact with a smart contract. It allows
 
 ```
 URL_PROVIDER=<Your Ethereum node URL>
-CONTRACT_ADDRESS=<Your contract address>
+CONTRACT_ADDRESS=<ORDERBOOKADDRESS>
+USDC_ADDRESS=<USDC ADDRESS>
+WETH_ADDRESS=<WETH ADDRESS>
 CHAIN_ID=<Your chain ID>
 MONGO_URI=mongodb+srv://<user>:<pass>@cluster0.rim1pqt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+PORT=<PORT NUMBER>
 ```
 
 ### Installation
