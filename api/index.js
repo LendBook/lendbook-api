@@ -189,7 +189,11 @@ app.get('/v1/balanceUSDC/:walletAddress', async (req, res) => {
   try {
     const usdcContract = new ethers.Contract(process.env.USDC_ADDRESS, erc20ABI, provider);
     const usdcBalance = await usdcContract.balanceOf(walletAddress);
-    const formattedBalance = usdcBalance ? parseFloat(ethers.utils.formatUnits(usdcBalance, 18)) : 0; 
+
+    // Log the balance for debugging
+    console.log(`USDC Balance: ${usdcBalance}`);
+
+    const formattedBalance = usdcBalance ? parseFloat(ethers.utils.formatUnits(usdcBalance, 6)) : 0; // Assuming USDC has 6 decimals
 
     res.json({
       balance: formattedBalance
@@ -211,7 +215,11 @@ app.get('/v1/balanceWETH/:walletAddress', async (req, res) => {
   try {
     const wethContract = new ethers.Contract(process.env.WETH_ADDRESS, erc20ABI, provider);
     const wethBalance = await wethContract.balanceOf(walletAddress);
-    const formattedBalance = wethBalance ? parseFloat(ethers.utils.formatUnits(wethBalance, 18)) : 0; 
+
+    // Log the balance for debugging
+    console.log(`WETH Balance: ${wethBalance}`);
+
+    const formattedBalance = wethBalance ? parseFloat(ethers.utils.formatUnits(wethBalance, 18)) : 0; // Assuming WETH has 18 decimals
 
     res.json({
       balance: formattedBalance
