@@ -260,23 +260,8 @@ app.get('/v1/request/:functionName/*', updateFunctionValue, (req, res) => {});
 app.get('/v1/constant/:constantName', updateConstantValue, (req, res) => {
 });
 
-/**
- * @swagger
- * /v1/balance:
- *   get:
- *     summary: Get the balance of USDC and WETH tokens for a given wallet address
- *     parameters:
- *       - in: query
- *         name: walletAddress
- *         required: true
- *         description: Address of the wallet to check balances
- *         schema:
- *           type: string
- *     responses:
- *       200:
- *         description: Success
- */
-app.get('/v1/balance', async (req, res) => {
+// Endpoint for USDC balance
+app.get('/v1/balanceUSDC', async (req, res) => {
   const { walletAddress } = req.query;
 
   if (!walletAddress) {
@@ -285,16 +270,10 @@ app.get('/v1/balance', async (req, res) => {
 
   try {
     const usdcContract = new ethers.Contract(process.env.USDC_ADDRESS, erc20ABI, provider);
-    const wethContract = new ethers.Contract(process.env.WETH_ADDRESS, erc20ABI, provider);
-
-    const [usdcBalance, wethBalance] = await Promise.all([
-      usdcContract.balanceOf(walletAddress),
-      wethContract.balanceOf(walletAddress)
-    ]);
+    const usdcBalance = await usdcContract.balanceOf(walletAddress);
 
     res.json({
-      usdcBalance: ethers.utils.formatUnits(usdcBalance, 18),
-      wethBalance: ethers.utils.formatUnits(wethBalance, 18) 
+      usdcBalance: ethers.utils.formatUnits(usdcBalance, 18)
     });
   } catch (error) {
     const err = error instanceof Error ? error : new Error(String(error));
@@ -302,6 +281,26 @@ app.get('/v1/balance', async (req, res) => {
   }
 });
 
+// Endpoint for WETH balance
+app.get('/v1/balanceWETH', async (req, res) => {
+  const { walletAddress } = req.query;
+
+  if (!walletAddress) {
+    return res.status(400).json({ error: "walletAddress is required" });
+  }
+
+  try {
+    const wethContract = new ethers.Contract(process.env.WETH_ADDRESS, erc20ABI, provider);
+    const wethBalance = await wethContract.balanceOf(walletAddress);
+
+    res.json({
+      wethBalance: ethers.utils.formatUnits(wethBalance, 18)
+    });
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error(String(error));
+    res.status(500).json({ error: err.message });
+  }
+});
 
 /**
  * @swagger
