@@ -188,7 +188,7 @@ app.get('/v1/balanceUSDC/:walletAddress', async (req, res) => {
   }
 
   try {
-    const usdcContract = new ethers.Contract(process.env.USDC_ADDRESS, erc20ABI, provider);
+    const usdcContract = new ethers.Contract("0xB1aEa92D4BF0BFBc2C5bA679A2819Efefc998CEB", erc20ABI, provider);
     const usdcBalance = await usdcContract.balanceOf(walletAddress);
     const formattedBalance = parseFloat(ethers.utils.formatUnits(usdcBalance, 18));
     
@@ -210,10 +210,10 @@ app.get('/v1/balanceWETH/:walletAddress', async (req, res) => {
   }
 
   try {
-    const wethContract = new ethers.Contract(process.env.WETH_ADDRESS, erc20ABI, provider);
-
-    console.log(process.env.WETH_ADDRESS);
+    const wethContract = new ethers.Contract("0x25b8e42bdFC4cf8268B56B049d5C730762035407", erc20ABI, provider);
     const wethBalance = await wethContract.balanceOf(walletAddress);
+
+    console.log(wethBalance);
     const formattedBalance = parseFloat(ethers.utils.formatUnits(wethBalance, 18));
  
     res.json({
