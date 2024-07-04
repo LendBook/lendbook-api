@@ -62,8 +62,9 @@ const options = {
 const swaggerSpec = swaggerJsdoc(options);
 
 app.use(cors({
-  origin: ['https://api.lendbook.org/api-docs']
+  origin: ['https://api.lendbook.org/api-docs', 'https://lendbook-ui.vercel.app','https://beta.lendbook.org']
 }));
+
 
 app.use('/api-docs', serve, setup(swaggerDocument));
 
