@@ -64,10 +64,7 @@ Returns the USDC balance of the provided wallet address.
 
 Returns the WETH balance of the provided wallet address.
 
-### GET /v1/symbolUSDC
+### GET /v1/symbol/:tokenAddress
 
-Returns the symbol of the USDC token.
+Returns the symbol of the provided token address.
 
-### GET /v1/symbolWETH
-
-Returns the symbol of the WETH token.
