@@ -230,6 +230,30 @@ app.get('/v1/balanceWETH/:walletAddress', async (req, res) => {
   }
 });
 
+// Endpoint for USDC symbol
+app.get('/v1/symbolUSDC', async (req, res) => {
+  try {
+    const usdcContract = new ethers.Contract(USDC_ADDRESS, erc20ABI, provider);
+    const symbol = await usdcContract.symbol();
+    res.json({ symbol });
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error(String(error));
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Endpoint for WETH symbol
+app.get('/v1/symbolWETH', async (req, res) => {
+  try {
+    const wethContract = new ethers.Contract(WETH_ADDRESS, erc20ABI, provider);
+    const symbol = await wethContract.symbol();
+    res.json({ symbol });
+  } catch (error) {
+    const err = error instanceof Error ? error : new Error(String(error));
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 /**
  * @swagger
