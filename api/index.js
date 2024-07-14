@@ -1,12 +1,12 @@
 import express from 'express';
-import { ethers } from 'ethers';
+import { ethers, BigNumber } from 'ethers';
 import cors from 'cors';
-import contractABI from '../abi/Book.json' assert { type: 'json' }; 
-import erc20ABI from '../abi/ERC20.json' assert { type: 'json' }; 
+import contractABI from '../abi/Book.json' assert { type: 'json' };
+import erc20ABI from '../abi/ERC20.json' assert { type: 'json' };
 import dotenv from 'dotenv';
 import swaggerJsdoc from 'swagger-jsdoc';
 import { serve, setup } from 'swagger-ui-express';
-import swaggerDocument from '../swagger.json' assert { type: 'json' }; 
+import swaggerDocument from '../swagger.json' assert { type: 'json' };
 import mongoose from 'mongoose';
 import cron from 'node-cron';
 
@@ -18,8 +18,8 @@ const urlProvider = process.env.URL_PROVIDER || '';
 const contractAddress = process.env.CONTRACT_ADDRESS || '';
 const chainId = process.env.CHAIN_ID || '';
 const mongoUri = process.env.MONGO_URI || '';
-const USDC_ADDRESS = process.env.USDC_ADDRESS ||'0xB1aEa92D4BF0BFBc2C5bA679A2819Efefc998CEB';
-const WETH_ADDRESS = process.env.WETH_ADDRESS ||'0x25b8e42bdFC4cf8268B56B049d5C730762035407';
+const USDC_ADDRESS = process.env.USDC_ADDRESS || '0xB1aEa92D4BF0BFBc2C5bA679A2819Efefc998CEB';
+const WETH_ADDRESS = process.env.WETH_ADDRESS || '0x25b8e42bdFC4cf8268B56B049d5C730762035407';
 
 mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -62,9 +62,8 @@ const options = {
 const swaggerSpec = swaggerJsdoc(options);
 
 app.use(cors({
-  origin: ['https://api.lendbook.org/api-docs', 'https://lendbook-ui.vercel.app','https://beta.lendbook.org']
+  origin: ['https://api.lendbook.org/api-docs', 'https://lendbook-ui.vercel.app', 'https://beta.lendbook.org']
 }));
-
 
 app.use('/api-docs', serve, setup(swaggerDocument));
 
@@ -183,7 +182,7 @@ async function updateFunctionValue(req, res, next) {
 
 // Function to convert BigNumber to a readable format
 const formatBigNumber = (balance, decimals) => {
-  const factor = ethers.BigNumber.from(10).pow(decimals);
+  const factor = BigNumber.from(10).pow(decimals);
   const formattedBalance = balance.div(factor).toString() + "." + balance.mod(factor).toString().padStart(decimals, '0');
   return parseFloat(formattedBalance);
 };
