@@ -182,8 +182,7 @@ async function updateFunctionValue(req, res, next) {
 
 // Function to convert BigNumber to a readable format
 const formatBigNumber = (balance, decimals) => {
-  const factor = ethers.BigNumber.from(10).pow(decimals);
-  const formattedBalance = balance.div(factor).toString() + "." + balance.mod(factor).toString().padStart(decimals, '0');
+  const formattedBalance = ethers.utils.formatUnits(balance, decimals);
   return parseFloat(formattedBalance);
 };
 
@@ -198,7 +197,7 @@ app.get('/v1/balanceUSDC/:walletAddress', async (req, res) => {
   try {
     const usdcContract = new ethers.Contract(USDC_ADDRESS, erc20ABI, provider);
     const usdcBalance = await usdcContract.balanceOf(walletAddress);
-    const formattedBalance = formatBigNumber(usdcBalance, 18); 
+    const formattedBalance = formatBigNumber(usdcBalance, 6); // USDC typically has 6 decimals
 
     res.json({
       balance: formattedBalance
@@ -220,7 +219,7 @@ app.get('/v1/balanceWETH/:walletAddress', async (req, res) => {
   try {
     const wethContract = new ethers.Contract(WETH_ADDRESS, erc20ABI, provider);
     const wethBalance = await wethContract.balanceOf(walletAddress);
-    const formattedBalance = formatBigNumber(wethBalance, 18); 
+    const formattedBalance = formatBigNumber(wethBalance, 18); // WETH typically has 18 decimals
 
     res.json({
       balance: formattedBalance
