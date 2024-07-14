@@ -2,6 +2,7 @@
   "name": "lendbook-api",
   "version": "1.0.0",
   "main": "api/index.js",
+  "type": "module",
   "engines": {
     "node": "20.x"
   },
