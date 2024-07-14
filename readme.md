@@ -56,3 +56,18 @@ Calls a function of the smart contract by providing the function name as a param
 
 Returns the value of a constant from the smart contract by providing the constant name as a parameter.
 
+### GET /v1/balanceUSDC/{walletAddress}
+
+Returns the USDC balance of the provided wallet address.
+
+### GET /v1/balanceWETH/{walletAddress}
+
+Returns the WETH balance of the provided wallet address.
+
+### GET /v1/symbolUSDC
+
+Returns the symbol of the USDC token.
+
+### GET /v1/symbolWETH
+
+Returns the symbol of the WETH token.
