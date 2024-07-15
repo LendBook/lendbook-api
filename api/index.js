@@ -18,8 +18,6 @@ const urlProvider = process.env.URL_PROVIDER || '';
 const contractAddress = process.env.CONTRACT_ADDRESS || '';
 const chainId = process.env.CHAIN_ID || '';
 const mongoUri = process.env.MONGO_URI || '';
-const USDC_ADDRESS = process.env.USDC_ADDRESS || '0xB1aEa92D4BF0BFBc2C5bA679A2819Efefc998CEB';
-const WETH_ADDRESS = process.env.WETH_ADDRESS || '0x25b8e42bdFC4cf8268B56B049d5C730762035407';
 
 mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -182,44 +180,23 @@ async function updateFunctionValue(req, res, next) {
 
 // Function to convert BigNumber to a readable format
 const formatBigNumber = (balance, decimals) => {
-  const formattedBalance = ethers.formatUnits(balance, decimals);
+  const formattedBalance = ethers.utils.formatUnits(balance, decimals);
   return parseFloat(formattedBalance);
 };
 
-// Endpoint for USDC balance
-app.get('/v1/balanceUSDC/:walletAddress', async (req, res) => {
-  const { walletAddress } = req.params;
+// Endpoint for token balance
+app.get('/v1/balance/:tokenAddress/:walletAddress', async (req, res) => {
+  const { tokenAddress, walletAddress } = req.params;
 
-  if (!walletAddress) {
-    return res.status(400).json({ error: "walletAddress is required" });
+  if (!walletAddress || !tokenAddress) {
+    return res.status(400).json({ error: "walletAddress and tokenAddress are required" });
   }
 
   try {
-    const usdcContract = new ethers.Contract(USDC_ADDRESS, erc20ABI, provider);
-    const usdcBalance = await usdcContract.balanceOf(walletAddress);
-    const formattedBalance = formatBigNumber(usdcBalance, 6); // USDC typically has 6 decimals
-
-    res.json({
-      balance: formattedBalance
-    });
-  } catch (error) {
-    const err = error instanceof Error ? error : new Error(String(error));
-    res.status(500).json({ error: err.message });
-  }
-});
-
-// Endpoint for WETH balance
-app.get('/v1/balanceWETH/:walletAddress', async (req, res) => {
-  const { walletAddress } = req.params;
-
-  if (!walletAddress) {
-    return res.status(400).json({ error: "walletAddress is required" });
-  }
-
-  try {
-    const wethContract = new ethers.Contract(WETH_ADDRESS, erc20ABI, provider);
-    const wethBalance = await wethContract.balanceOf(walletAddress);
-    const formattedBalance = formatBigNumber(wethBalance, 18); // WETH typically has 18 decimals
+    const tokenContract = new ethers.Contract(tokenAddress, erc20ABI, provider);
+    const decimals = await tokenContract.decimals();
+    const balance = await tokenContract.balanceOf(walletAddress);
+    const formattedBalance = formatBigNumber(balance, decimals);
 
     res.json({
       balance: formattedBalance
@@ -233,6 +210,10 @@ app.get('/v1/balanceWETH/:walletAddress', async (req, res) => {
 // Endpoint for token symbol
 app.get('/v1/symbol/:tokenAddress', async (req, res) => {
   const { tokenAddress } = req.params;
+
+  if (!tokenAddress) {
+    return res.status(400).json({ error: "tokenAddress is required" });
+  }
 
   try {
     const tokenContract = new ethers.Contract(tokenAddress, erc20ABI, provider);
