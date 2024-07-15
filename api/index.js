@@ -180,7 +180,7 @@ async function updateFunctionValue(req, res, next) {
 
 // Function to convert BigNumber to a readable format
 const formatBigNumber = (balance, decimals) => {
-  const formattedBalance = ethers.utils.formatUnits(balance, decimals);
+  const formattedBalance = ethers.formatUnits(balance, decimals);
   return parseFloat(formattedBalance);
 };
 
