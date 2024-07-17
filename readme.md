@@ -27,7 +27,7 @@ PORT=<PORT NUMBER>
 
 1. Clone this repository to your local machine.
 2. Navigate to the project directory in your terminal.
-3. Run `yarn install` to install dependencies.
+3. Run `yarn install` to install dependencies
 
 ### Usage
 
